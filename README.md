@@ -1,12 +1,16 @@
 # Pesquisa de satisfação — Fisioterapia e Psicologia
 
-Duas páginas, sem servidor: o paciente responde em `index.html`, a coordenação
-analisa em `admin.html`. Os dados ficam no Supabase.
+**No ar:**
 
-O diferencial deste app: **quase nada está fixo no código**. Nome da clínica,
-textos das telas, áreas de atendimento, profissionais e as próprias perguntas
-são editados dentro do painel, na aba **Configurações**. Mudou uma pergunta,
-mudou a pesquisa — sem mexer em arquivo nenhum.
+- Pesquisa que o paciente responde: https://clinicafeed-dev.github.io/fisio-psico/
+- Painel da coordenação: https://clinicafeed-dev.github.io/fisio-psico/admin.html
+
+Login do painel: `clinicafeed@gmail.com`. A senha é criada pelo próprio
+administrador, pelo link enviado por e-mail; se esquecer, use "Esqueci minha
+senha" na tela de login.
+
+Projeto no Supabase: `clinica-fisio-psico` (região São Paulo).
+Repositório do código: `clinicafeed-dev/fisio-psico`.
 
 ---
 
@@ -24,8 +28,8 @@ casa na fisioterapia e sobre acolhimento e privacidade na psicologia.
 **Link direto para uma área** (pula a primeira tela):
 
 ```
-https://SEU-SITE/?a=Fisioterapia
-https://SEU-SITE/?a=Psicologia
+https://clinicafeed-dev.github.io/fisio-psico/?a=Fisioterapia
+https://clinicafeed-dev.github.io/fisio-psico/?a=Psicologia
 ```
 
 ---
