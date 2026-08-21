@@ -212,6 +212,20 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 
   <div id="carregando" class="carregando">Carregando…</div>
 
+  <!-- =================== SUS OU PARTICULAR =================== -->
+  <div id="tela-convenio" class="escondido" style="display:flex;flex-direction:column;gap:20px">
+    <div class="topo">
+      <span class="selo" id="selo-clinica-0"></span>
+      <h1 id="titulo-pesquisa-0"></h1>
+      <p class="abertura" id="texto-abertura-0"></p>
+    </div>
+    <div class="bloco">
+      <h2 id="pergunta-convenio"></h2>
+      <div class="areas" id="lista-convenio"></div>
+    </div>
+    <p class="rodape" id="rodape-0"></p>
+  </div>
+
   <!-- =================== ESCOLHA DA ÁREA =================== -->
   <div id="tela-area" class="escondido" style="display:flex;flex-direction:column;gap:20px">
     <div class="topo">
@@ -223,6 +237,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
       <h2>Qual atendimento você fez?</h2>
       <div class="areas" id="lista-areas"></div>
     </div>
+    <button type="button" class="voltar escondido" id="btn-voltar-convenio">← Voltar</button>
     <p class="rodape" id="rodape-1"></p>
   </div>
 
@@ -311,6 +326,7 @@ var ROTULOS = ["Muito ruim","Ruim","Regular","Bom","Excelente"];
 
 var dados = { config:null, areas:[], profissionais:[], perguntas:[] };
 var areaAtual = null;
+var convenioAtual = null;
 var respostasDadas = {};   // pergunta_id -> valor
 var perguntasDaArea = [];
 
@@ -378,6 +394,12 @@ function iniciar(){
   $("#aviso-sigilo").textContent = c.aviso_sigilo || "";
   $("#texto-obrigado").textContent = c.texto_agradecimento || "Obrigado por responder.";
 
+  $("#selo-clinica-0").textContent = c.nome_clinica || "";
+  $("#titulo-pesquisa-0").textContent = c.titulo_pesquisa || "Como foi o seu atendimento?";
+  $("#texto-abertura-0").textContent = c.texto_abertura || "";
+  $("#rodape-0").textContent = c.rodape || "";
+  $("#pergunta-convenio").textContent = c.pergunta_convenio || "O seu atendimento foi pelo SUS ou particular?";
+
   $("#carregando").classList.add("escondido");
 
   if (!dados.areas.length){
@@ -385,17 +407,71 @@ function iniciar(){
     return;
   }
 
-  // Link direto para uma área: ?a=Fisioterapia
+  // Link direto: ?a=Fisioterapia (área) e ?c=SUS (convênio)
   var busca = new URLSearchParams(location.search);
+  var atalhoConv = busca.get("c");
+  if (atalhoConv){
+    var achouConv = opcoesConvenio().filter(function(o){
+      return o.toLowerCase() === atalhoConv.toLowerCase();
+    })[0];
+    if (achouConv) convenioAtual = achouConv;
+  }
+
   var atalho = busca.get("a");
   if (atalho){
     var achou = dados.areas.filter(function(a){
       return a.nome.toLowerCase() === atalho.toLowerCase();
     })[0];
-    if (achou){ abrirArea(achou); return; }
+    if (achou){
+      atalhoArea = achou;
+      if (!precisaConvenio()) { abrirArea(achou); return; }
+      montarConvenio();
+      return;
+    }
   }
 
-  montarAreas();
+  comecar();
+}
+
+var atalhoArea = null;
+
+function precisaConvenio(){
+  return dados.config.usar_convenio !== false && !convenioAtual && opcoesConvenio().length > 0;
+}
+
+function opcoesConvenio(){
+  return String(dados.config.opcoes_convenio || "SUS, Particular")
+    .split(",").map(function(x){ return x.trim(); }).filter(Boolean);
+}
+
+function comecar(){
+  if (precisaConvenio()) montarConvenio();
+  else montarAreas();
+}
+
+/* ------------------------------------------------------------------ */
+/* Tela 0 — SUS ou particular                                          */
+/* ------------------------------------------------------------------ */
+function montarConvenio(){
+  var alvo = $("#lista-convenio");
+  alvo.innerHTML = "";
+  opcoesConvenio().forEach(function(op){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "area-btn";
+    b.innerHTML = "<strong>" + esc(op) + "</strong>";
+    b.onclick = function(){
+      convenioAtual = op;
+      if (atalhoArea){ abrirArea(atalhoArea); return; }
+      montarAreas();
+      window.scrollTo(0,0);
+    };
+    alvo.appendChild(b);
+  });
+  $("#tela-convenio").classList.remove("escondido");
+  $("#tela-area").classList.add("escondido");
+  $("#tela-form").classList.add("escondido");
+  $("#tela-fim").classList.add("escondido");
 }
 
 /* ------------------------------------------------------------------ */
@@ -413,10 +489,23 @@ function montarAreas(){
     b.onclick = function(){ abrirArea(a); };
     alvo.appendChild(b);
   });
+  var temConv = dados.config.usar_convenio !== false && opcoesConvenio().length > 0;
+  $("#btn-voltar-convenio").classList.toggle("escondido", !temConv);
+  $("#selo-clinica").textContent = temConv && convenioAtual
+    ? (dados.config.nome_clinica || "") + " · " + convenioAtual
+    : (dados.config.nome_clinica || "");
+
+  $("#tela-convenio").classList.add("escondido");
   $("#tela-area").classList.remove("escondido");
   $("#tela-form").classList.add("escondido");
   $("#tela-fim").classList.add("escondido");
 }
+
+$("#btn-voltar-convenio").onclick = function(){
+  convenioAtual = null;
+  montarConvenio();
+  window.scrollTo(0,0);
+};
 
 /* ------------------------------------------------------------------ */
 /* Tela 2 — perguntas                                                  */
@@ -429,7 +518,7 @@ function abrirArea(area){
     return !p.area_id || p.area_id === area.id;
   }).sort(function(x,y){ return (x.ordem||0) - (y.ordem||0); });
 
-  $("#selo-area").textContent = area.nome;
+  $("#selo-area").textContent = convenioAtual ? area.nome + " · " + convenioAtual : area.nome;
   $("#titulo-form").textContent = dados.config.titulo_pesquisa || "Como foi o seu atendimento?";
   $("#aviso-sigilo").style.display = dados.config.aviso_sigilo ? "" : "none";
 
@@ -447,6 +536,7 @@ function abrirArea(area){
   montarPerguntas();
   atualizarProgresso();
 
+  $("#tela-convenio").classList.add("escondido");
   $("#tela-area").classList.add("escondido");
   $("#tela-fim").classList.add("escondido");
   $("#tela-form").classList.remove("escondido");
@@ -605,6 +695,7 @@ $("#tela-form").addEventListener("submit", function(ev){
 
   var cabeca = {
     id: respostaId,
+    convenio: convenioAtual,
     area_id: areaAtual.id,
     area_nome: areaAtual.nome,
     profissional_id: profId,
@@ -649,7 +740,13 @@ $("#tela-form").addEventListener("submit", function(ev){
 });
 
 $("#btn-voltar").onclick = function(){ limpar(); montarAreas(); window.scrollTo(0,0); };
-$("#btn-outra").onclick  = function(){ limpar(); montarAreas(); window.scrollTo(0,0); };
+$("#btn-outra").onclick  = function(){
+  limpar();
+  convenioAtual = null;
+  atalhoArea = null;
+  comecar();
+  window.scrollTo(0,0);
+};
 
 function limpar(){
   respostasDadas = {};

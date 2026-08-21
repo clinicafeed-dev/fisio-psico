@@ -327,6 +327,7 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
     <button class="ui" data-per="90">90 dias</button>
     <button class="ui" data-per="365">12 meses</button>
     <button class="ui" data-per="0" aria-pressed="true">Tudo</button>
+    <select class="ui" id="f-convenio" aria-label="SUS ou particular"><option value="">SUS e particular</option></select>
     <select class="ui" id="f-area" aria-label="Área"><option value="">Todas as áreas</option></select>
     <select class="ui" id="f-prof" aria-label="Profissional"><option value="">Todos os profissionais</option></select>
   </div>
@@ -364,6 +365,12 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
       <h2>O que fazer primeiro</h2>
       <p class="legenda">Sugestões geradas a partir das respostas deste período, da mais urgente para a menos urgente.</p>
       <div class="pilha" id="lista-acoes"></div>
+    </div>
+
+    <div class="cartao escondido" id="cartao-convenio">
+      <h2>SUS e particular lado a lado</h2>
+      <p class="legenda">Mesma clínica, experiências que podem ser bem diferentes. Se a diferença for grande, vale entender o porquê.</p>
+      <div class="comp" id="comp-convenio"></div>
     </div>
 
     <div class="cartao">
@@ -459,6 +466,18 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
           <textarea id="c-rodape" maxlength="400"></textarea>
         </div>
       </div>
+      <div class="cfg-grade" style="border-top:1px solid var(--line);padding-top:14px">
+        <label class="liga"><input type="checkbox" id="c-usar-conv"> Perguntar SUS ou particular antes de tudo</label>
+        <div class="cfg-campo">
+          <label for="c-perg-conv">Como a pergunta aparece</label>
+          <input type="text" id="c-perg-conv" maxlength="160">
+        </div>
+        <div class="cfg-campo">
+          <label for="c-opc-conv">Opções, separadas por vírgula</label>
+          <input type="text" id="c-opc-conv" maxlength="200">
+          <p class="dica">Ex.: <code>SUS, Particular</code> — ou acrescente convênios, se a clínica atender.</p>
+        </div>
+      </div>
       <div class="barra-acoes">
         <button class="mini primario" id="btn-salvar-config">Salvar textos</button>
         <span class="salvo escondido" id="ok-config">Salvo ✓</span>
@@ -543,7 +562,7 @@ var ROTULOS5 = ["Muito ruim","Ruim","Regular","Bom","Excelente"];
 
 var S = {
   usuario:null, config:{}, areas:[], profissionais:[], perguntas:[],
-  respostas:[], filtro:{ periodo:0, areaId:"", profId:"" },
+  respostas:[], filtro:{ periodo:0, areaId:"", profId:"", convenio:"" },
   grupoComentario:"", aba:"resumo"
 };
 
@@ -687,7 +706,22 @@ $("#btn-atualizar").onclick = carregarTudo;
 /* ================================================================== */
 /* Filtros e abas                                                     */
 /* ================================================================== */
+function opcoesConvenio(){
+  return String(S.config.opcoes_convenio || "SUS, Particular")
+    .split(",").map(function(x){ return x.trim(); }).filter(Boolean);
+}
+
 function montarFiltros(){
+  var fc = $("#f-convenio");
+  var usa = S.config.usar_convenio !== false;
+  fc.classList.toggle("escondido", !usa);
+  fc.innerHTML = '<option value="">' + esc(opcoesConvenio().join(" e ")) + '</option>';
+  opcoesConvenio().forEach(function(o){
+    var op = document.createElement("option");
+    op.value = o; op.textContent = "Só " + o; fc.appendChild(op);
+  });
+  fc.value = S.filtro.convenio;
+
   var fa = $("#f-area");
   fa.innerHTML = '<option value="">Todas as áreas</option>';
   S.areas.forEach(function(a){
@@ -723,6 +757,7 @@ $("#f-area").onchange = function(){
   atualizarProfDoFiltro(); desenharTudo();
 };
 $("#f-prof").onchange = function(){ S.filtro.profId = this.value; desenharTudo(); };
+$("#f-convenio").onchange = function(){ S.filtro.convenio = this.value; desenharTudo(); };
 
 $$(".abas button").forEach(function(b){
   b.onclick = function(){
@@ -758,6 +793,7 @@ function filtradas(){
     if (corte && new Date(r.criado_em) < corte) return false;
     if (S.filtro.areaId && r.area_id !== S.filtro.areaId) return false;
     if (S.filtro.profId && r.profissional_id !== S.filtro.profId) return false;
+    if (S.filtro.convenio && r.convenio !== S.filtro.convenio) return false;
     return true;
   });
 }
@@ -893,8 +929,87 @@ function desenharResumo(lista){
   $("#t-coment").textContent = R.comentarios;
 
   desenharAcoes(lista, R);
+  desenharConvenio();
   desenharPerguntas(lista);
   desenharTempo(lista);
+}
+
+/* ---------- SUS x particular ---------- */
+function desenharConvenio(){
+  var cartao = $("#cartao-convenio"), alvo = $("#comp-convenio");
+  alvo.innerHTML = "";
+
+  var usa = S.config.usar_convenio !== false;
+  var ops = opcoesConvenio();
+  if (!usa || ops.length < 2 || S.filtro.convenio){
+    cartao.classList.add("escondido");
+    return;
+  }
+
+  var corte = null;
+  if (S.filtro.periodo > 0){ corte = new Date(); corte.setDate(corte.getDate() - S.filtro.periodo); }
+  var base = S.respostas.filter(function(r){
+    if (corte && new Date(r.criado_em) < corte) return false;
+    if (S.filtro.areaId && r.area_id !== S.filtro.areaId) return false;
+    if (S.filtro.profId && r.profissional_id !== S.filtro.profId) return false;
+    return true;
+  });
+
+  var pacote = ops.map(function(op, i){
+    var lista = base.filter(function(r){ return r.convenio === op; });
+    return { nome:op, cor:CORES_SERIE[i % CORES_SERIE.length], lista:lista, R:resumo(lista), mapa:porPergunta(lista) };
+  });
+
+  if (!pacote.some(function(p){ return p.lista.length; })){
+    cartao.classList.add("escondido");
+    return;
+  }
+  cartao.classList.remove("escondido");
+
+  /* nota geral */
+  var linhaGeral = document.createElement("div");
+  linhaGeral.className = "comp-linha";
+  var barrasGeral = pacote.map(function(p){
+    var v = p.R.media;
+    return '<div class="comp-barra">' +
+      '<div class="nome"><i class="ponto" style="background:' + p.cor + '"></i>' + esc(p.nome) + '</div>' +
+      '<div class="trilho"><i style="width:' + (v == null ? 0 : (v/10*100).toFixed(0)) + '%;background:' + p.cor + '"></i></div>' +
+      '<div class="v">' + (v == null ? "—" : n1(v)) + '</div></div>';
+  }).join("");
+  var difs = pacote.filter(function(p){ return p.R.media != null; }).map(function(p){ return p.R.media; });
+  var alerta = "";
+  if (difs.length >= 2 && (Math.max.apply(null,difs) - Math.min.apply(null,difs)) >= 1){
+    var pior = pacote.filter(function(p){ return p.R.media != null; })
+      .sort(function(a,b){ return a.R.media - b.R.media; })[0];
+    alerta = ' <span class="pill atencao">' + esc(pior.nome) + ' está atrás</span>';
+  }
+  linhaGeral.innerHTML = '<div class="tit">Nota média dos pacientes' + alerta +
+    '<span style="color:var(--ink-3);font-size:12px"> · de 0 a 10</span></div>' + barrasGeral;
+  alvo.appendChild(linhaGeral);
+
+  /* quantidade e insatisfeitos */
+  var linhaQtd = document.createElement("div");
+  linhaQtd.className = "comp-linha";
+  linhaQtd.innerHTML = '<div class="tit">Quantas respostas e quantos saíram insatisfeitos</div>' +
+    pacote.map(function(p){
+      return '<div class="comp-barra">' +
+        '<div class="nome"><i class="ponto" style="background:' + p.cor + '"></i>' + esc(p.nome) + '</div>' +
+        '<div class="trilho"><i style="width:' + Math.round(p.R.pctRuim) + '%;background:var(--ruim)"></i></div>' +
+        '<div class="v">' + Math.round(p.R.pctRuim) + '%</div></div>' +
+        '<div style="font-size:12px;color:var(--ink-3);margin:-2px 0 8px 130px">' +
+        p.R.total + (p.R.total === 1 ? " resposta" : " respostas") + '</div>';
+    }).join("");
+  alvo.appendChild(linhaQtd);
+
+  /* perguntas comuns */
+  S.perguntas.filter(function(q){ return !q.area_id; })
+    .sort(function(a,b){ return (a.ordem||0)-(b.ordem||0); })
+    .forEach(function(perg){
+      if (!pacote.some(function(p){ return p.mapa[perg.id] && p.mapa[perg.id].n; })) return;
+      alvo.appendChild(linhaComparativa(perg, pacote.map(function(p){
+        return { area:{ nome:p.nome }, cor:p.cor, mapa:p.mapa };
+      })));
+    });
 }
 
 /* ---------- perguntas ---------- */
@@ -1112,6 +1227,7 @@ function respostasDaArea(areaId){
   return S.respostas.filter(function(r){
     if (corte && new Date(r.criado_em) < corte) return false;
     if (S.filtro.profId && r.profissional_id !== S.filtro.profId) return false;
+    if (S.filtro.convenio && r.convenio !== S.filtro.convenio) return false;
     return r.area_id === areaId;
   });
 }
@@ -1272,6 +1388,7 @@ function cartaoResposta(r, comFormulario){
 
   var meta = [];
   meta.push(dataBR(r.criado_em));
+  if (r.convenio) meta.push(esc(r.convenio));
   if (r.area_nome) meta.push(esc(r.area_nome));
   if (r.profissional_nome) meta.push(esc(r.profissional_nome));
   if (r.nota != null) meta.push("nota " + r.nota);
@@ -1369,7 +1486,7 @@ $("#btn-csv").onclick = function(){
   if (!lista.length){ erroPainel("Não há respostas para baixar neste filtro."); return; }
 
   var perguntas = S.perguntas.slice().sort(function(a,b){ return (a.ordem||0)-(b.ordem||0); });
-  var cab = ["Data","Área","Profissional","Nota 0-10","Situação"];
+  var cab = ["Data","SUS ou particular","Área","Profissional","Nota 0-10","Situação"];
   perguntas.forEach(function(p){ if (p.tipo !== "nota") cab.push(p.titulo); });
   cab = cab.concat(["Comentário","Nome","Contato","Autoriza contato","Retorno feito em","Retorno por","Observação do retorno"]);
 
@@ -1380,6 +1497,7 @@ $("#btn-csv").onclick = function(){
     var g = grupoDaNota(r.nota);
     var linha = [
       new Date(r.criado_em).toLocaleString("pt-BR"),
+      r.convenio || "",
       r.area_nome || "",
       r.profissional_nome || "",
       r.nota == null ? "" : r.nota,
@@ -1424,6 +1542,9 @@ function preencherConfig(){
   $("#c-sigilo").value   = c.aviso_sigilo || "";
   $("#c-obrigado").value = c.texto_agradecimento || "";
   $("#c-rodape").value   = c.rodape || "";
+  $("#c-usar-conv").checked = c.usar_convenio !== false;
+  $("#c-perg-conv").value = c.pergunta_convenio || "";
+  $("#c-opc-conv").value  = c.opcoes_convenio || "";
   desenharAreasCfg();
   desenharProfCfg();
   desenharPergCfg();
@@ -1443,14 +1564,22 @@ $("#btn-salvar-config").onclick = function(){
     aviso_sigilo: $("#c-sigilo").value.trim(),
     texto_agradecimento: $("#c-obrigado").value.trim(),
     rodape: $("#c-rodape").value.trim(),
+    usar_convenio: $("#c-usar-conv").checked,
+    pergunta_convenio: $("#c-perg-conv").value.trim() || "O seu atendimento foi pelo SUS ou particular?",
+    opcoes_convenio: $("#c-opc-conv").value.trim() || "SUS, Particular",
     atualizado_em: new Date().toISOString()
   }).eq("id", 1).then(function(r){
     b.disabled = false; b.textContent = "Salvar textos";
     if (r.error){ erroPainel("Não foi possível salvar: " + r.error.message); return; }
     S.config.nome_clinica = $("#c-nome").value.trim();
+    S.config.usar_convenio = $("#c-usar-conv").checked;
+    S.config.pergunta_convenio = $("#c-perg-conv").value.trim();
+    S.config.opcoes_convenio = $("#c-opc-conv").value.trim() || "SUS, Particular";
     $("#cab-clinica").textContent = S.config.nome_clinica;
     avisarSalvo($("#ok-config"));
+    montarFiltros();
     desenharLinks();
+    desenharTudo();
   });
 };
 
@@ -1699,10 +1828,15 @@ $("#btn-nova-perg").onclick = function(){
 function desenharLinks(){
   var base = location.origin + location.pathname.replace(/admin\.html$/, "");
   var linhas = '<tr><th>Para quem</th><th>Link</th><th></th></tr>';
-  linhas += linhaLink("Todos os pacientes", base, "geral");
+  linhas += linhaLink("Todos os pacientes", base);
   S.areas.filter(function(a){ return a.ativa; }).forEach(function(a){
-    linhas += linhaLink("Só " + a.nome, base + "?a=" + encodeURIComponent(a.nome), a.id);
+    linhas += linhaLink("Só " + a.nome, base + "?a=" + encodeURIComponent(a.nome));
   });
+  if (S.config.usar_convenio !== false){
+    opcoesConvenio().forEach(function(o){
+      linhas += linhaLink("Só " + o + " (pula a 1ª pergunta)", base + "?c=" + encodeURIComponent(o));
+    });
+  }
   $("#tab-links").innerHTML = linhas;
 
   $$("#tab-links [data-copiar]").forEach(function(b){

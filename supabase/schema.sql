@@ -34,6 +34,12 @@ create table if not exists public.config (
   texto_agradecimento text not null default 'Obrigado por responder. Sua opinião chega direto para a coordenação da clínica.',
   rodape            text not null default 'Suas respostas são confidenciais e usadas apenas para melhorar o atendimento.',
   aviso_sigilo      text not null default 'Você pode responder sem se identificar. Nada do que escrever aqui vai para o seu prontuário nem para o seu profissional individualmente.',
+
+  -- primeira pergunta da pesquisa: SUS ou particular
+  usar_convenio     boolean not null default true,
+  pergunta_convenio text not null default 'O seu atendimento foi pelo SUS ou particular?',
+  opcoes_convenio   text not null default 'SUS, Particular',
+
   atualizado_em     timestamptz not null default now()
 );
 
@@ -93,6 +99,7 @@ create index if not exists perguntas_area_idx on public.perguntas (area_id, orde
 create table if not exists public.respostas (
   id             uuid primary key default gen_random_uuid(),
   criado_em      timestamptz not null default now(),
+  convenio       text check (char_length(convenio) <= 40),
   area_id        uuid references public.areas(id) on delete set null,
   area_nome      text check (char_length(area_nome) <= 60),
   profissional_id uuid references public.profissionais(id) on delete set null,
@@ -109,6 +116,7 @@ create table if not exists public.respostas (
 
 create index if not exists respostas_criado_em_idx on public.respostas (criado_em desc);
 create index if not exists respostas_area_idx      on public.respostas (area_id);
+create index if not exists respostas_convenio_idx  on public.respostas (convenio);
 
 create table if not exists public.resposta_itens (
   id            uuid primary key default gen_random_uuid(),
@@ -218,6 +226,7 @@ do $$
 declare
   v_fisio uuid;
   v_psico uuid;
+  v_odonto uuid;
 begin
   if exists (select 1 from public.areas) then
     return;
@@ -230,6 +239,10 @@ begin
   insert into public.areas (nome, descricao, ordem)
   values ('Psicologia', 'Atendimento psicológico individual ou em grupo', 2)
   returning id into v_psico;
+
+  insert into public.areas (nome, descricao, ordem)
+  values ('Odontologia', 'Consultas, procedimentos e tratamento dentário', 3)
+  returning id into v_odonto;
 
   -- Perguntas de todas as áreas (area_id nulo)
   insert into public.perguntas (area_id, titulo, ajuda, tipo, ordem, obrigatoria) values
@@ -267,6 +280,19 @@ begin
               null, 'escala', 13, false),
     (v_psico, 'Você pretende continuar o acompanhamento?',
               null, 'sim_nao', 14, false);
+
+  -- Perguntas só da odontologia
+  insert into public.perguntas (area_id, titulo, ajuda, tipo, ordem, obrigatoria) values
+    (v_odonto, 'O dentista explicou o tratamento e as opções antes de começar?',
+               'Se você entendeu o que ia ser feito e por quê.', 'escala', 10, false),
+    (v_odonto, 'O controle da dor durante o procedimento foi adequado?',
+               'Anestesia, cuidado e atenção ao seu desconforto.', 'escala', 11, false),
+    (v_odonto, 'O consultório e os instrumentos pareciam limpos e esterilizados?',
+               null, 'escala', 12, false),
+    (v_odonto, 'Foi fácil conseguir horário para dar continuidade ao tratamento?',
+               null, 'escala', 13, false),
+    (v_odonto, 'Você recebeu orientação de cuidados depois do procedimento?',
+               null, 'sim_nao', 14, false);
 end $$;
 
 -- ---------------------------------------------------------------------
