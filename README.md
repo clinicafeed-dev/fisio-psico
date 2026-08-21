@@ -34,6 +34,21 @@ https://clinicafeed-dev.github.io/fisio-psico/?a=Psicologia
 
 ---
 
+## Modo totem (tablet na recepção)
+
+Depois que o paciente envia, a tela de agradecimento fica alguns segundos com
+uma contagem regressiva e **volta sozinha para a primeira pergunta**, pronta
+para o próximo. O tempo é ajustável em Configurações (`0` desliga).
+
+Junto com isso, se alguém começar a responder e for embora no meio, o
+formulário se limpa sozinho depois de 2 minutos sem ninguém tocar na tela — o
+próximo paciente nunca vê o nome, o contato ou as notas de quem veio antes.
+
+Para deixar o tablet redondo: abra o link no navegador, ative o modo tela cheia
+(ou "adicionar à tela de início") e desligue a suspensão automática do aparelho.
+
+---
+
 ## Como a coordenação vê
 
 O painel fala português do dia a dia, não jargão de pesquisa de mercado:

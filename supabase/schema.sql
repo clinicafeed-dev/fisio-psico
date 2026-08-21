@@ -40,6 +40,9 @@ create table if not exists public.config (
   pergunta_convenio text not null default 'O seu atendimento foi pelo SUS ou particular?',
   opcoes_convenio   text not null default 'SUS, Particular',
 
+  -- modo totem: volta sozinho para a tela inicial (0 = não voltar)
+  segundos_retorno  smallint not null default 8 check (segundos_retorno between 0 and 120),
+
   atualizado_em     timestamptz not null default now()
 );
 

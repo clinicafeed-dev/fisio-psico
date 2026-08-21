@@ -478,6 +478,13 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
           <p class="dica">Ex.: <code>SUS, Particular</code> — ou acrescente convênios, se a clínica atender.</p>
         </div>
       </div>
+      <div class="cfg-grade" style="border-top:1px solid var(--line);padding-top:14px">
+        <div class="cfg-campo">
+          <label for="c-seg-retorno">Modo totem: voltar sozinho para o início depois de</label>
+          <input type="number" id="c-seg-retorno" min="0" max="120" step="1" style="max-width:160px">
+          <p class="dica">Segundos na tela de agradecimento antes de voltar para a primeira pergunta, para o próximo paciente. Use <code>0</code> para não voltar sozinho.</p>
+        </div>
+      </div>
       <div class="barra-acoes">
         <button class="mini primario" id="btn-salvar-config">Salvar textos</button>
         <span class="salvo escondido" id="ok-config">Salvo ✓</span>
@@ -1545,6 +1552,7 @@ function preencherConfig(){
   $("#c-usar-conv").checked = c.usar_convenio !== false;
   $("#c-perg-conv").value = c.pergunta_convenio || "";
   $("#c-opc-conv").value  = c.opcoes_convenio || "";
+  $("#c-seg-retorno").value = (c.segundos_retorno == null ? 8 : c.segundos_retorno);
   desenharAreasCfg();
   desenharProfCfg();
   desenharPergCfg();
@@ -1567,6 +1575,7 @@ $("#btn-salvar-config").onclick = function(){
     usar_convenio: $("#c-usar-conv").checked,
     pergunta_convenio: $("#c-perg-conv").value.trim() || "O seu atendimento foi pelo SUS ou particular?",
     opcoes_convenio: $("#c-opc-conv").value.trim() || "SUS, Particular",
+    segundos_retorno: Math.max(0, Math.min(120, parseInt($("#c-seg-retorno").value, 10) || 0)),
     atualizado_em: new Date().toISOString()
   }).eq("id", 1).then(function(r){
     b.disabled = false; b.textContent = "Salvar textos";
