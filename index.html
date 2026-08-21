@@ -22,6 +22,7 @@
   --marca-escura:#0A4149;
   --quente:#B4552C;
   --ok:#1F6B4A;
+  --sobre-marca:#FFFFFF;
   --sombra:0 1px 2px rgba(21,39,43,.05), 0 8px 24px -12px rgba(21,39,43,.18);
   --raio:14px;
   --fonte:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -41,6 +42,7 @@
     --marca-escura:#8FD8DA;
     --quente:#E39468;
     --ok:#6BC79A;
+    --sobre-marca:#08191C;
     --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
   }
 }
@@ -57,6 +59,7 @@
   --marca-escura:#8FD8DA;
   --quente:#E39468;
   --ok:#6BC79A;
+  --sobre-marca:#08191C;
   --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
 }
 
@@ -126,7 +129,7 @@ h1{
   background:var(--marca);border-color:var(--marca);
 }
 .escala button[aria-pressed="true"] b,
-.escala button[aria-pressed="true"] small{color:#fff}
+.escala button[aria-pressed="true"] small{color:var(--sobre-marca)}
 
 /* ---------- nota 0 a 10 ---------- */
 .nota{display:grid;grid-template-columns:repeat(11,1fr);gap:5px}
@@ -137,8 +140,8 @@ h1{
   color:var(--ink-2);cursor:pointer;transition:.15s;
 }
 .nota button:hover{border-color:var(--marca)}
-.nota button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:#fff}
-.pontas{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-top:-4px}
+.nota button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:var(--sobre-marca)}
+.pontas{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--ink-3);margin-top:8px}
 @media (max-width:420px){
   .nota{grid-template-columns:repeat(6,1fr)}
   .escala{grid-template-columns:repeat(5,1fr);gap:5px}
@@ -153,7 +156,7 @@ h1{
   font:inherit;font-weight:500;color:var(--ink-2);cursor:pointer;transition:.15s;
 }
 .simnao button:hover{border-color:var(--marca)}
-.simnao button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:#fff}
+.simnao button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:var(--sobre-marca)}
 
 /* ---------- campos ---------- */
 label{display:block;font-size:14px;font-weight:500;margin-bottom:6px;color:var(--ink-2)}
@@ -172,14 +175,11 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 
 /* ---------- ações ---------- */
 .enviar{
-  width:100%;padding:16px;background:var(--marca);color:#fff;border:none;border-radius:12px;
+  width:100%;padding:16px;background:var(--marca);color:var(--sobre-marca);border:none;border-radius:12px;
   font:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:.15s;
 }
 .enviar:hover{background:var(--marca-escura)}
 .enviar:disabled{opacity:.55;cursor:progress}
-:root[data-theme="dark"] .enviar,
-:root:not([data-theme="light"]) .enviar{color:#08191C}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .enviar{color:#fff}}
 .voltar{
   background:none;border:none;font:inherit;font-size:14px;color:var(--ink-3);
   cursor:pointer;padding:6px 0;text-align:left;text-decoration:underline;text-underline-offset:3px;
@@ -199,7 +199,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 /* ---------- fim ---------- */
 .fim{text-align:center;padding:44px 20px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .fim .tique{
-  width:62px;height:62px;border-radius:50%;background:var(--marca);color:#fff;
+  width:62px;height:62px;border-radius:50%;background:var(--marca);color:var(--sobre-marca);
   display:grid;place-items:center;font-size:31px;
 }
 .fim h1{font-size:27px}
