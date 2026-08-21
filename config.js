@@ -4,6 +4,6 @@
 //  profissionais são editados dentro do painel, na aba Configurações.
 // ---------------------------------------------------------------------
 window.APP = {
-  supabaseUrl: "https://SEU-PROJETO.supabase.co",
-  supabaseAnonKey: "COLE-AQUI-A-CHAVE-PUBLICA"
+  supabaseUrl: "https://hdqqmxdptvpoiqgjguqu.supabase.co",
+  supabaseAnonKey: "sb_publishable_WLX3PGioGB8aRnrx5F0svQ_zCs1CBGN"
 };
