@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pesquisa de satisfação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F6F8F8;
+  --card:#FFFFFF;
+  --line:#DFE6E7;
+  --line-forte:#C6D2D4;
+  --ink:#15272B;
+  --ink-2:#3D5257;
+  --ink-3:#6C8085;
+  --marca:#0F5C66;
+  --marca-clara:#E4F1F1;
+  --marca-escura:#0A4149;
+  --quente:#B4552C;
+  --ok:#1F6B4A;
+  --sombra:0 1px 2px rgba(21,39,43,.05), 0 8px 24px -12px rgba(21,39,43,.18);
+  --raio:14px;
+  --fonte:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --titulo:"Fraunces",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1618;
+    --card:#162226;
+    --line:#26363A;
+    --line-forte:#35494E;
+    --ink:#EAF1F1;
+    --ink-2:#B7C7C9;
+    --ink-3:#89999D;
+    --marca:#5FBFC4;
+    --marca-clara:#17343A;
+    --marca-escura:#8FD8DA;
+    --quente:#E39468;
+    --ok:#6BC79A;
+    --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1618;
+  --card:#162226;
+  --line:#26363A;
+  --line-forte:#35494E;
+  --ink:#EAF1F1;
+  --ink-2:#B7C7C9;
+  --ink-3:#89999D;
+  --marca:#5FBFC4;
+  --marca-clara:#17343A;
+  --marca-escura:#8FD8DA;
+  --quente:#E39468;
+  --ok:#6BC79A;
+  --sombra:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--fonte);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:660px;margin:0 auto;padding:28px 18px 64px;display:flex;flex-direction:column;gap:20px}
+
+/* ---------- topo ---------- */
+.topo{display:flex;flex-direction:column;gap:10px}
+.selo{
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  color:var(--marca);
+}
+h1{
+  font-family:var(--titulo);font-weight:600;font-size:clamp(26px,6vw,34px);
+  line-height:1.2;margin:0;text-wrap:balance;letter-spacing:-.01em;
+}
+.abertura{margin:0;color:var(--ink-2);font-size:16px;max-width:52ch}
+
+/* ---------- progresso ---------- */
+.barra{height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--marca);border-radius:99px;transition:width .35s ease}
+.progresso-txt{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ---------- cartões ---------- */
+.bloco{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--raio);
+  padding:20px;box-shadow:var(--sombra);display:flex;flex-direction:column;gap:14px;
+}
+.bloco h2{
+  font-family:var(--fonte);font-size:17px;font-weight:600;margin:0;line-height:1.35;
+  text-wrap:balance;
+}
+.bloco .ajuda{margin:-8px 0 0;font-size:14px;color:var(--ink-3)}
+.obrig{color:var(--quente);font-weight:600}
+
+/* ---------- escolha de área ---------- */
+.areas{display:grid;gap:12px}
+.area-btn{
+  display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;
+  background:var(--card);border:1.5px solid var(--line-forte);border-radius:var(--raio);
+  padding:18px 20px;cursor:pointer;font:inherit;color:inherit;width:100%;
+  transition:border-color .15s,background .15s,transform .1s;
+}
+.area-btn:hover{border-color:var(--marca);background:var(--marca-clara)}
+.area-btn:active{transform:scale(.99)}
+.area-btn strong{font-size:18px;font-weight:600}
+.area-btn span{font-size:14px;color:var(--ink-3)}
+
+/* ---------- escala 1 a 5 ---------- */
+.escala{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.escala button{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
+  padding:12px 4px;min-height:76px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:11px;
+  font:inherit;color:var(--ink-2);cursor:pointer;transition:.15s;
+}
+.escala button b{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.escala button small{font-size:11px;line-height:1.25;text-align:center;color:var(--ink-3)}
+.escala button:hover{border-color:var(--marca)}
+.escala button[aria-pressed="true"]{
+  background:var(--marca);border-color:var(--marca);
+}
+.escala button[aria-pressed="true"] b,
+.escala button[aria-pressed="true"] small{color:#fff}
+
+/* ---------- nota 0 a 10 ---------- */
+.nota{display:grid;grid-template-columns:repeat(11,1fr);gap:5px}
+.nota button{
+  aspect-ratio:1;min-height:40px;padding:0;
+  background:var(--card);border:1.5px solid var(--line);border-radius:9px;
+  font:inherit;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;
+  color:var(--ink-2);cursor:pointer;transition:.15s;
+}
+.nota button:hover{border-color:var(--marca)}
+.nota button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:#fff}
+.pontas{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-top:-4px}
+@media (max-width:420px){
+  .nota{grid-template-columns:repeat(6,1fr)}
+  .escala{grid-template-columns:repeat(5,1fr);gap:5px}
+  .escala button{min-height:70px;padding:10px 2px}
+  .escala button small{font-size:10px}
+}
+
+/* ---------- sim / não ---------- */
+.simnao{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.simnao button{
+  padding:14px;background:var(--card);border:1.5px solid var(--line);border-radius:11px;
+  font:inherit;font-weight:500;color:var(--ink-2);cursor:pointer;transition:.15s;
+}
+.simnao button:hover{border-color:var(--marca)}
+.simnao button[aria-pressed="true"]{background:var(--marca);border-color:var(--marca);color:#fff}
+
+/* ---------- campos ---------- */
+label{display:block;font-size:14px;font-weight:500;margin-bottom:6px;color:var(--ink-2)}
+input[type=text],input[type=email],select,textarea{
+  width:100%;padding:12px 13px;font:inherit;font-size:16px;color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line-forte);border-radius:10px;
+}
+textarea{min-height:110px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
+  outline:2.5px solid var(--marca);outline-offset:2px
+}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.dupla{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-2);cursor:pointer}
+.check input{margin-top:3px;width:18px;height:18px;accent-color:var(--marca);flex:0 0 auto}
+
+/* ---------- ações ---------- */
+.enviar{
+  width:100%;padding:16px;background:var(--marca);color:#fff;border:none;border-radius:12px;
+  font:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:.15s;
+}
+.enviar:hover{background:var(--marca-escura)}
+.enviar:disabled{opacity:.55;cursor:progress}
+:root[data-theme="dark"] .enviar,
+:root:not([data-theme="light"]) .enviar{color:#08191C}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) .enviar{color:#fff}}
+.voltar{
+  background:none;border:none;font:inherit;font-size:14px;color:var(--ink-3);
+  cursor:pointer;padding:6px 0;text-align:left;text-decoration:underline;text-underline-offset:3px;
+}
+.rodape{font-size:13px;color:var(--ink-3);text-align:center;margin:0;text-wrap:balance}
+
+/* ---------- avisos ---------- */
+.aviso{
+  border-left:3px solid var(--marca);background:var(--marca-clara);
+  padding:12px 14px;border-radius:0 10px 10px 0;font-size:14px;color:var(--ink-2);
+}
+.erro{
+  border:1px solid var(--quente);background:var(--card);color:var(--ink);
+  padding:14px;border-radius:10px;font-size:15px;
+}
+
+/* ---------- fim ---------- */
+.fim{text-align:center;padding:44px 20px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.fim .tique{
+  width:62px;height:62px;border-radius:50%;background:var(--marca);color:#fff;
+  display:grid;place-items:center;font-size:31px;
+}
+.fim h1{font-size:27px}
+.escondido{display:none !important}
+.carregando{text-align:center;color:var(--ink-3);padding:56px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="carregando" class="carregando">Carregando…</div>
+
+  <!-- =================== ESCOLHA DA ÁREA =================== -->
+  <div id="tela-area" class="escondido" style="display:flex;flex-direction:column;gap:20px">
+    <div class="topo">
+      <span class="selo" id="selo-clinica"></span>
+      <h1 id="titulo-pesquisa"></h1>
+      <p class="abertura" id="texto-abertura"></p>
+    </div>
+    <div class="bloco">
+      <h2>Qual atendimento você fez?</h2>
+      <div class="areas" id="lista-areas"></div>
+    </div>
+    <p class="rodape" id="rodape-1"></p>
+  </div>
+
+  <!-- =================== PERGUNTAS =================== -->
+  <form id="tela-form" class="escondido" style="flex-direction:column;gap:20px" novalidate>
+    <div class="topo">
+      <span class="selo" id="selo-area"></span>
+      <h1 id="titulo-form"></h1>
+      <div class="barra"><i id="barra-i"></i></div>
+      <span class="progresso-txt" id="progresso-txt"></span>
+    </div>
+
+    <div class="aviso" id="aviso-sigilo"></div>
+
+    <div class="bloco" id="bloco-prof">
+      <h2>Com quem você foi atendido?</h2>
+      <p class="ajuda">Isso ajuda a coordenação a saber onde melhorar. Você pode pular.</p>
+      <select id="sel-prof">
+        <option value="">Prefiro não dizer</option>
+      </select>
+    </div>
+
+    <div id="perguntas"></div>
+
+    <div class="bloco">
+      <h2>Quer contar alguma coisa com suas palavras?</h2>
+      <p class="ajuda">O que foi bom, o que atrapalhou, o que você mudaria. Opcional.</p>
+      <textarea id="comentario" maxlength="2000" placeholder="Escreva aqui…"></textarea>
+    </div>
+
+    <div class="bloco">
+      <h2>Quer que a gente entre em contato com você?</h2>
+      <p class="ajuda">Só preencha se quiser um retorno sobre este atendimento. Pode enviar em branco.</p>
+      <div class="dupla">
+        <div>
+          <label for="p-nome">Seu nome</label>
+          <input type="text" id="p-nome" maxlength="120" autocomplete="name">
+        </div>
+        <div>
+          <label for="p-contato">WhatsApp ou e-mail</label>
+          <input type="text" id="p-contato" maxlength="120" autocomplete="tel">
+        </div>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="p-autoriza">
+        <span>Autorizo a clínica a falar comigo sobre esta avaliação.</span>
+      </label>
+    </div>
+
+    <div id="msg-erro" class="erro escondido" role="alert"></div>
+    <button type="submit" class="enviar" id="btn-enviar">Enviar avaliação</button>
+    <button type="button" class="voltar" id="btn-voltar">← Escolher outro atendimento</button>
+    <p class="rodape" id="rodape-2"></p>
+  </form>
+
+  <!-- =================== FIM =================== -->
+  <div id="tela-fim" class="escondido">
+    <div class="fim">
+      <div class="tique">✓</div>
+      <h1>Recebido!</h1>
+      <p class="abertura" style="text-align:center" id="texto-obrigado"></p>
+      <button type="button" class="voltar" id="btn-outra" style="text-align:center">Responder por outro atendimento</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+
+var CFG = window.APP || {};
+var URL_BASE = (CFG.supabaseUrl || "").replace(/\/+$/, "");
+var CHAVE = CFG.supabaseAnonKey || "";
+var pronto = URL_BASE && CHAVE && URL_BASE.indexOf("SEU-PROJETO") === -1 && CHAVE.indexOf("COLE-AQUI") === -1;
+
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(t){
+  return String(t == null ? "" : t)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+};
+
+var ROTULOS = ["Muito ruim","Ruim","Regular","Bom","Excelente"];
+
+var dados = { config:null, areas:[], profissionais:[], perguntas:[] };
+var areaAtual = null;
+var respostasDadas = {};   // pergunta_id -> valor
+var perguntasDaArea = [];
+
+/* ------------------------------------------------------------------ */
+/* Comunicação com o banco                                             */
+/* ------------------------------------------------------------------ */
+function api(caminho, opcoes){
+  opcoes = opcoes || {};
+  var h = {
+    "apikey": CHAVE,
+    "Authorization": "Bearer " + CHAVE,
+    "Content-Type": "application/json"
+  };
+  if (opcoes.headers) for (var k in opcoes.headers) h[k] = opcoes.headers[k];
+  return fetch(URL_BASE + "/rest/v1/" + caminho, {
+    method: opcoes.method || "GET",
+    headers: h,
+    body: opcoes.body ? JSON.stringify(opcoes.body) : undefined
+  }).then(function(r){
+    if (!r.ok) return r.text().then(function(t){ throw new Error(t || ("HTTP " + r.status)); });
+    return r.status === 204 ? null : r.json().catch(function(){ return null; });
+  });
+}
+
+function falha(texto){
+  $("#carregando").classList.add("escondido");
+  var d = document.createElement("div");
+  d.className = "erro";
+  d.textContent = texto;
+  $(".wrap").appendChild(d);
+}
+
+/* ------------------------------------------------------------------ */
+/* Carregar o conteúdo da pesquisa                                     */
+/* ------------------------------------------------------------------ */
+if (!pronto){
+  falha("O arquivo config.js ainda está sem o endereço e a chave do Supabase.");
+  return;
+}
+
+Promise.all([
+  api("config?select=*&limit=1"),
+  api("areas?select=*&ativa=eq.true&order=ordem.asc"),
+  api("profissionais?select=*&ativo=eq.true&order=ordem.asc,nome.asc"),
+  api("perguntas?select=*&ativa=eq.true&order=ordem.asc")
+]).then(function(r){
+  dados.config = (r[0] && r[0][0]) || {};
+  dados.areas = r[1] || [];
+  dados.profissionais = r[2] || [];
+  dados.perguntas = r[3] || [];
+  iniciar();
+}).catch(function(e){
+  falha("Não conseguimos carregar a pesquisa agora. Tente de novo em alguns instantes.");
+  if (window.console) console.error(e);
+});
+
+function iniciar(){
+  var c = dados.config;
+  document.title = "Pesquisa de satisfação — " + (c.nome_clinica || "");
+  $("#selo-clinica").textContent = c.nome_clinica || "";
+  $("#titulo-pesquisa").textContent = c.titulo_pesquisa || "Como foi o seu atendimento?";
+  $("#texto-abertura").textContent = c.texto_abertura || "";
+  $("#rodape-1").textContent = c.rodape || "";
+  $("#rodape-2").textContent = c.rodape || "";
+  $("#aviso-sigilo").textContent = c.aviso_sigilo || "";
+  $("#texto-obrigado").textContent = c.texto_agradecimento || "Obrigado por responder.";
+
+  $("#carregando").classList.add("escondido");
+
+  if (!dados.areas.length){
+    falha("A pesquisa ainda não foi configurada. Peça para a coordenação cadastrar as áreas de atendimento no painel.");
+    return;
+  }
+
+  // Link direto para uma área: ?a=Fisioterapia
+  var busca = new URLSearchParams(location.search);
+  var atalho = busca.get("a");
+  if (atalho){
+    var achou = dados.areas.filter(function(a){
+      return a.nome.toLowerCase() === atalho.toLowerCase();
+    })[0];
+    if (achou){ abrirArea(achou); return; }
+  }
+
+  montarAreas();
+}
+
+/* ------------------------------------------------------------------ */
+/* Tela 1 — escolher a área                                            */
+/* ------------------------------------------------------------------ */
+function montarAreas(){
+  var alvo = $("#lista-areas");
+  alvo.innerHTML = "";
+  dados.areas.forEach(function(a){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "area-btn";
+    b.innerHTML = "<strong>" + esc(a.nome) + "</strong>" +
+                  (a.descricao ? "<span>" + esc(a.descricao) + "</span>" : "");
+    b.onclick = function(){ abrirArea(a); };
+    alvo.appendChild(b);
+  });
+  $("#tela-area").classList.remove("escondido");
+  $("#tela-form").classList.add("escondido");
+  $("#tela-fim").classList.add("escondido");
+}
+
+/* ------------------------------------------------------------------ */
+/* Tela 2 — perguntas                                                  */
+/* ------------------------------------------------------------------ */
+function abrirArea(area){
+  areaAtual = area;
+  respostasDadas = {};
+
+  perguntasDaArea = dados.perguntas.filter(function(p){
+    return !p.area_id || p.area_id === area.id;
+  }).sort(function(x,y){ return (x.ordem||0) - (y.ordem||0); });
+
+  $("#selo-area").textContent = area.nome;
+  $("#titulo-form").textContent = dados.config.titulo_pesquisa || "Como foi o seu atendimento?";
+  $("#aviso-sigilo").style.display = dados.config.aviso_sigilo ? "" : "none";
+
+  // profissionais da área
+  var sel = $("#sel-prof");
+  sel.innerHTML = '<option value="">Prefiro não dizer</option>';
+  var lista = dados.profissionais.filter(function(p){ return p.area_id === area.id; });
+  lista.forEach(function(p){
+    var o = document.createElement("option");
+    o.value = p.id; o.textContent = p.nome;
+    sel.appendChild(o);
+  });
+  $("#bloco-prof").style.display = lista.length ? "" : "none";
+
+  montarPerguntas();
+  atualizarProgresso();
+
+  $("#tela-area").classList.add("escondido");
+  $("#tela-fim").classList.add("escondido");
+  $("#tela-form").classList.remove("escondido");
+  $("#tela-form").style.display = "flex";
+  window.scrollTo(0,0);
+}
+
+function montarPerguntas(){
+  var alvo = $("#perguntas");
+  alvo.innerHTML = "";
+  alvo.style.display = "flex";
+  alvo.style.flexDirection = "column";
+  alvo.style.gap = "20px";
+
+  perguntasDaArea.forEach(function(p){
+    var bloco = document.createElement("div");
+    bloco.className = "bloco";
+
+    var h = document.createElement("h2");
+    h.innerHTML = esc(p.titulo) + (p.obrigatoria ? ' <span class="obrig" title="obrigatória">*</span>' : "");
+    bloco.appendChild(h);
+
+    if (p.ajuda){
+      var a = document.createElement("p");
+      a.className = "ajuda";
+      a.textContent = p.ajuda;
+      bloco.appendChild(a);
+    }
+
+    if (p.tipo === "nota")      bloco.appendChild(campoNota(p));
+    else if (p.tipo === "escala")  bloco.appendChild(campoEscala(p));
+    else if (p.tipo === "sim_nao") bloco.appendChild(campoSimNao(p));
+    else                           bloco.appendChild(campoTexto(p));
+
+    alvo.appendChild(bloco);
+  });
+}
+
+function marcar(grupo, botao, pid, valor){
+  Array.prototype.forEach.call(grupo.querySelectorAll("button"), function(b){
+    b.setAttribute("aria-pressed", b === botao ? "true" : "false");
+  });
+  respostasDadas[pid] = valor;
+  atualizarProgresso();
+}
+
+function campoNota(p){
+  var caixa = document.createElement("div");
+  var g = document.createElement("div");
+  g.className = "nota";
+  for (var i = 0; i <= 10; i++){
+    (function(n){
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = n;
+      b.setAttribute("aria-pressed","false");
+      b.setAttribute("aria-label", "Nota " + n);
+      b.onclick = function(){ marcar(g, b, p.id, n); };
+      g.appendChild(b);
+    })(i);
+  }
+  caixa.appendChild(g);
+  var pt = document.createElement("div");
+  pt.className = "pontas";
+  pt.innerHTML = "<span>0 — não indicaria</span><span>10 — indicaria sem pensar</span>";
+  caixa.appendChild(pt);
+  return caixa;
+}
+
+function campoEscala(p){
+  var g = document.createElement("div");
+  g.className = "escala";
+  for (var i = 1; i <= 5; i++){
+    (function(n){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-pressed","false");
+      b.setAttribute("aria-label", ROTULOS[n-1]);
+      b.innerHTML = "<b>" + n + "</b><small>" + ROTULOS[n-1] + "</small>";
+      b.onclick = function(){ marcar(g, b, p.id, n); };
+      g.appendChild(b);
+    })(i);
+  }
+  return g;
+}
+
+function campoSimNao(p){
+  var g = document.createElement("div");
+  g.className = "simnao";
+  [["Sim",1],["Não",0]].forEach(function(par){
+    var b = document.createElement("button");
+    b.type = "button"; b.textContent = par[0];
+    b.setAttribute("aria-pressed","false");
+    b.onclick = function(){ marcar(g, b, p.id, par[1]); };
+    g.appendChild(b);
+  });
+  return g;
+}
+
+function campoTexto(p){
+  var t = document.createElement("textarea");
+  t.maxLength = 2000;
+  t.placeholder = "Escreva aqui…";
+  t.oninput = function(){
+    var v = t.value.trim();
+    if (v) respostasDadas[p.id] = v; else delete respostasDadas[p.id];
+    atualizarProgresso();
+  };
+  return t;
+}
+
+function atualizarProgresso(){
+  var total = perguntasDaArea.length;
+  var feitas = perguntasDaArea.filter(function(p){
+    return respostasDadas[p.id] !== undefined && respostasDadas[p.id] !== "";
+  }).length;
+  $("#barra-i").style.width = total ? Math.round(feitas/total*100) + "%" : "0%";
+  $("#progresso-txt").textContent = feitas + " de " + total + " respondidas";
+}
+
+/* ------------------------------------------------------------------ */
+/* Enviar                                                              */
+/* ------------------------------------------------------------------ */
+function idNovo(){
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+    var r = Math.random()*16|0, v = c === "x" ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+}
+
+$("#tela-form").addEventListener("submit", function(ev){
+  ev.preventDefault();
+  var erro = $("#msg-erro");
+  erro.classList.add("escondido");
+
+  var faltando = perguntasDaArea.filter(function(p){
+    return p.obrigatoria && (respostasDadas[p.id] === undefined || respostasDadas[p.id] === "");
+  });
+  if (faltando.length){
+    erro.textContent = "Falta responder: " + faltando[0].titulo;
+    erro.classList.remove("escondido");
+    erro.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+
+  var btn = $("#btn-enviar");
+  btn.disabled = true; btn.textContent = "Enviando…";
+
+  var respostaId = idNovo();
+  var perguntaNota = perguntasDaArea.filter(function(p){ return p.tipo === "nota"; })[0];
+  var nota = perguntaNota ? respostasDadas[perguntaNota.id] : null;
+
+  var sel = $("#sel-prof");
+  var profId = sel.value || null;
+  var profNome = profId ? sel.options[sel.selectedIndex].textContent : null;
+
+  var cabeca = {
+    id: respostaId,
+    area_id: areaAtual.id,
+    area_nome: areaAtual.nome,
+    profissional_id: profId,
+    profissional_nome: profNome,
+    nota: (nota === undefined ? null : nota),
+    comentario: $("#comentario").value.trim() || null,
+    nome: $("#p-nome").value.trim() || null,
+    contato: $("#p-contato").value.trim() || null,
+    autoriza: $("#p-autoriza").checked
+  };
+
+  var itens = perguntasDaArea.filter(function(p){
+    return respostasDadas[p.id] !== undefined && respostasDadas[p.id] !== "";
+  }).map(function(p){
+    var v = respostasDadas[p.id];
+    return {
+      resposta_id: respostaId,
+      pergunta_id: p.id,
+      pergunta_titulo: p.titulo,
+      tipo: p.tipo,
+      valor_num: (p.tipo === "texto") ? null : v,
+      valor_texto: (p.tipo === "texto") ? String(v).slice(0,2000) : null
+    };
+  });
+
+  api("respostas", { method:"POST", body:cabeca, headers:{ "Prefer":"return=minimal" } })
+    .then(function(){
+      if (!itens.length) return null;
+      return api("resposta_itens", { method:"POST", body:itens, headers:{ "Prefer":"return=minimal" } });
+    })
+    .then(function(){
+      $("#tela-form").classList.add("escondido");
+      $("#tela-fim").classList.remove("escondido");
+      window.scrollTo(0,0);
+    })
+    .catch(function(e){
+      btn.disabled = false; btn.textContent = "Enviar avaliação";
+      erro.textContent = "Não conseguimos enviar agora. Verifique sua internet e tente de novo.";
+      erro.classList.remove("escondido");
+      if (window.console) console.error(e);
+    });
+});
+
+$("#btn-voltar").onclick = function(){ limpar(); montarAreas(); window.scrollTo(0,0); };
+$("#btn-outra").onclick  = function(){ limpar(); montarAreas(); window.scrollTo(0,0); };
+
+function limpar(){
+  respostasDadas = {};
+  $("#comentario").value = "";
+  $("#p-nome").value = "";
+  $("#p-contato").value = "";
+  $("#p-autoriza").checked = false;
+  $("#sel-prof").value = "";
+  $("#msg-erro").classList.add("escondido");
+  var b = $("#btn-enviar");
+  b.disabled = false; b.textContent = "Enviar avaliação";
+}
+
+})();
+</script>
+</body>
+</html>
