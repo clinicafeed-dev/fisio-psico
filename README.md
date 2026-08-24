@@ -73,8 +73,17 @@ O painel fala português do dia a dia, não jargão de pesquisa de mercado:
 - **Configurações** — textos, áreas, profissionais, perguntas e os links prontos
   para copiar
 
-Filtros de período, área e profissional valem para todas as abas de análise.
-O botão **Baixar planilha** exporta um CSV que abre direto no Excel.
+Filtros de período, área, profissional e SUS/particular valem para todas as
+abas de análise.
+
+**Botões do topo:**
+
+- **Gerar relatório** — monta um documento pronto para imprimir ou salvar em PDF,
+  respeitando os filtros que estiverem aplicados. Traz os números principais,
+  como as notas se dividem, a evolução mês a mês, a nota de cada pergunta, o
+  resultado por área e por SUS/particular, recomendações para o próximo período
+  e uma seleção de comentários (priorizando quem saiu insatisfeito).
+- **Baixar planilha** — CSV que abre direto no Excel, com uma linha por resposta.
 
 ---
 

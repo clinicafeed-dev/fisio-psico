@@ -243,6 +243,94 @@ select.ui{padding-right:26px}
 .cfg-titulo-grupo{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
 .salvo{font-size:13px;color:var(--bom);font-weight:500}
 
+/* ================= RELATÓRIO ================= */
+/* Escopo próprio, sempre claro: relatório impresso é preto no branco. */
+.relatorio{
+  --r-ink:#152227; --r-ink2:#3D5257; --r-ink3:#6E8288;
+  --r-linha:#DCE4E5; --r-linha2:#B9C6C8; --r-fundo:#F4F7F7;
+  --r-marca:#0F5C66; --r-a:#0093A6; --r-b:#AD6317; --r-c:#5B7C1E;
+  --r-bom:#1F7A4C; --r-atencao:#8A6D00; --r-ruim:#B02A2A;
+  background:#fff;color:var(--r-ink);
+  max-width:820px;margin:0 auto;padding:0 0 40px;
+}
+.rel-barra{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  padding:14px 0 18px;border-bottom:1px solid var(--r-linha);margin-bottom:26px;
+}
+.rel-folha{padding:0 4px}
+.rel-cabeca{margin-bottom:26px}
+.rel-cabeca .selo{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--r-marca)}
+.rel-cabeca h1{font-family:var(--titulo);font-size:31px;font-weight:600;margin:5px 0 8px;letter-spacing:-.01em;color:var(--r-ink)}
+.rel-cabeca .linha-info{font-size:13px;color:var(--r-ink3);display:flex;flex-wrap:wrap;gap:6px 16px}
+.rel-secao{margin:0 0 28px}
+.rel-secao > h2{
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--r-ink3);
+  padding-bottom:7px;border-bottom:1px solid var(--r-linha);margin-bottom:15px;
+}
+.rel-frase{font-size:16px;line-height:1.6;color:var(--r-ink2);margin:0 0 16px;text-wrap:balance}
+.rel-frase b{color:var(--r-ink)}
+
+.rel-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.rel-tile{border:1px solid var(--r-linha);border-radius:10px;padding:13px 14px;background:#fff}
+.rel-tile .rot{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--r-ink3);font-weight:600}
+.rel-tile .n{font-size:29px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums;margin-top:3px}
+.rel-tile .obs{font-size:12px;color:var(--r-ink3);margin-top:2px}
+@media (max-width:640px){.rel-tiles{grid-template-columns:repeat(2,1fr)}}
+
+.rel-faixa{display:flex;height:30px;border-radius:7px;overflow:hidden;gap:2px;background:var(--r-linha)}
+.rel-faixa div{display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.rel-leg{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:9px;font-size:12.5px;color:var(--r-ink2)}
+.rel-leg span{display:inline-flex;align-items:center;gap:6px}
+.rel-ponto{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+
+.rel-linhas{display:flex;flex-direction:column}
+.rel-linha{display:grid;grid-template-columns:1fr 150px 74px;gap:12px;align-items:center;
+  padding:8px 0;border-top:1px solid var(--r-linha);font-size:13.5px}
+.rel-linha:first-child{border-top:none}
+.rel-linha .trilho{height:9px;background:var(--r-fundo);border-radius:99px;overflow:hidden;border:1px solid var(--r-linha)}
+.rel-linha .trilho i{display:block;height:100%;border-radius:99px;background:var(--r-marca)}
+.rel-linha .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.rel-tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid;margin-left:6px;vertical-align:1px}
+.rel-tag.bom{color:var(--r-bom);border-color:var(--r-bom)}
+.rel-tag.atencao{color:var(--r-atencao);border-color:var(--r-atencao)}
+.rel-tag.ruim{color:var(--r-ruim);border-color:var(--r-ruim)}
+
+.rel-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){.rel-grid2{grid-template-columns:1fr}}
+.rel-caixa{border:1px solid var(--r-linha);border-radius:10px;padding:14px}
+.rel-caixa h3{font-size:14px;font-weight:600;margin:0 0 3px;display:flex;align-items:center;gap:7px}
+.rel-caixa .sub{font-size:12px;color:var(--r-ink3);margin:0 0 10px}
+.rel-caixa .grande{font-family:var(--titulo);font-size:36px;font-weight:600;line-height:1;letter-spacing:-.02em}
+
+.rel-acao{border:1px solid var(--r-linha);border-left:3px solid var(--r-ruim);border-radius:0 9px 9px 0;
+  padding:12px 14px;margin-bottom:10px;break-inside:avoid}
+.rel-acao.atencao{border-left-color:var(--r-atencao)}
+.rel-acao.bom{border-left-color:var(--r-bom)}
+.rel-acao .t{font-size:14.5px;font-weight:600;margin-bottom:3px}
+.rel-acao .p{font-size:13px;color:var(--r-ink2);margin:0 0 7px}
+.rel-acao ul{margin:0;padding-left:17px;font-size:13px;color:var(--r-ink2);display:flex;flex-direction:column;gap:4px}
+
+.rel-fala{border:1px solid var(--r-linha);border-radius:9px;padding:12px 14px;margin-bottom:9px;break-inside:avoid}
+.rel-fala .meta{font-size:11.5px;color:var(--r-ink3);display:flex;flex-wrap:wrap;gap:9px;margin-bottom:5px}
+.rel-fala p{margin:0;font-size:13.5px;line-height:1.55;color:var(--r-ink)}
+.rel-vazio{font-size:13px;color:var(--r-ink3);padding:14px 0}
+.rel-rodape{border-top:1px solid var(--r-linha);margin-top:26px;padding-top:12px;
+  font-size:11.5px;color:var(--r-ink3);display:flex;flex-wrap:wrap;gap:5px 16px;justify-content:space-between}
+
+@media print{
+  @page{ size:A4; margin:14mm 12mm; }
+  body{background:#fff !important}
+  .casca > .cabeca, .casca > .abas, .casca > .filtros,
+  #aba-resumo, #aba-comparar, #aba-comentarios, #aba-retornos, #aba-config,
+  #msg-painel, #carregando, .rodape-app, .rel-barra{ display:none !important }
+  .casca{padding:0;max-width:none}
+  .relatorio{max-width:none;padding:0}
+  .rel-secao > h2{page-break-after:avoid;break-after:avoid}
+  .rel-acao,.rel-fala,.rel-caixa,.rel-tile,.rel-linha,
+  .rel-faixa,.rel-tiles,.rel-grid2 svg,#rel-conteudo svg{page-break-inside:avoid;break-inside:avoid}
+  .rel-cabeca{page-break-after:avoid}
+}
+
 .carregando{color:var(--ink-3);text-align:center;padding:44px 0}
 .rodape-app{font-size:12px;color:var(--ink-3);text-align:center;padding-top:10px}
 table.tab{width:100%;border-collapse:collapse;font-size:14px}
@@ -307,6 +395,7 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
       <p class="sub" id="cab-periodo">Carregando…</p>
     </div>
     <div class="acoes">
+      <button class="ui" id="btn-relatorio">Gerar relatório</button>
       <button class="ui" id="btn-atualizar">Atualizar</button>
       <button class="ui" id="btn-csv">Baixar planilha</button>
       <button class="ui" id="btn-sair">Sair</button>
@@ -526,6 +615,16 @@ table.tab td.n{text-align:right;font-variant-numeric:tabular-nums}
       <div class="rolagem"><table class="tab" id="tab-links"></table></div>
     </div>
 
+  </section>
+
+  <!-- ---------- RELATÓRIO ---------- -->
+  <section id="tela-relatorio" class="relatorio escondido">
+    <div class="rel-barra">
+      <button class="ui" id="btn-fechar-rel">← Voltar ao painel</button>
+      <span style="font-size:13px;color:var(--r-ink3)">Use “Imprimir” e escolha <b>Salvar como PDF</b> para enviar por e-mail ou WhatsApp.</span>
+      <button class="ui" id="btn-imprimir" style="background:var(--r-marca);border-color:var(--r-marca);color:#fff;font-weight:600">Imprimir / Salvar PDF</button>
+    </div>
+    <div class="rel-folha" id="rel-conteudo"></div>
   </section>
 
   <p class="rodape-app" id="rodape-user"></p>
@@ -1537,6 +1636,309 @@ $("#btn-csv").onclick = function(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
 };
+
+/* ================================================================== */
+/* RELATÓRIO                                                          */
+/* ================================================================== */
+var PARTES_PAINEL = ["#aba-resumo","#aba-comparar","#aba-comentarios","#aba-retornos","#aba-config"];
+
+$("#btn-relatorio").onclick = function(){
+  var lista = filtradas();
+  if (!lista.length){ erroPainel("Não há respostas neste filtro para montar um relatório."); return; }
+  $("#rel-conteudo").innerHTML = montarRelatorio(lista);
+  PARTES_PAINEL.forEach(function(k){ $(k).classList.add("escondido"); });
+  $$(".cabeca, .abas, .filtros").forEach(function(el){ el.classList.add("escondido"); });
+  $("#tela-relatorio").classList.remove("escondido");
+  window.scrollTo(0,0);
+};
+
+$("#btn-fechar-rel").onclick = function(){
+  $("#tela-relatorio").classList.add("escondido");
+  $$(".cabeca, .abas").forEach(function(el){ el.classList.remove("escondido"); });
+  $(".filtros").classList.toggle("escondido", S.aba === "config");
+  $("#aba-" + S.aba).classList.remove("escondido");
+  window.scrollTo(0,0);
+};
+
+$("#btn-imprimir").onclick = function(){ window.print(); };
+
+function pctTxt(v){ return Math.round(v) + "%"; }
+
+function montarRelatorio(lista){
+  var R = resumo(lista);
+  var agora = new Date();
+  var periodo = S.filtro.periodo === 0 ? "Todo o período"
+              : S.filtro.periodo === 30 ? "Últimos 30 dias"
+              : S.filtro.periodo === 90 ? "Últimos 90 dias" : "Últimos 12 meses";
+
+  var recortes = [];
+  if (S.filtro.convenio) recortes.push("Só " + S.filtro.convenio);
+  if (S.filtro.areaId){
+    var a = S.areas.filter(function(x){ return x.id === S.filtro.areaId; })[0];
+    if (a) recortes.push("Só " + a.nome);
+  }
+  if (S.filtro.profId){
+    var pr = S.profissionais.filter(function(x){ return x.id === S.filtro.profId; })[0];
+    if (pr) recortes.push("Só " + pr.nome);
+  }
+
+  var h = "";
+
+  /* ---------- cabeçalho ---------- */
+  h += '<div class="rel-cabeca">' +
+       '<div class="selo">' + esc(S.config.nome_clinica || "Clínica") + '</div>' +
+       '<h1>Relatório de satisfação dos pacientes</h1>' +
+       '<div class="linha-info">' +
+         '<span><b>Período:</b> ' + esc(periodo) + '</span>' +
+         '<span>' + dataBR(lista[0].criado_em) + ' a ' + dataBR(lista[lista.length-1].criado_em) + '</span>' +
+         '<span><b>' + lista.length + '</b> ' + (lista.length === 1 ? "resposta" : "respostas") + '</span>' +
+         (recortes.length ? '<span><b>Recorte:</b> ' + esc(recortes.join(" · ")) + '</span>' : '') +
+         '<span>Gerado em ' + agora.toLocaleDateString("pt-BR") + '</span>' +
+       '</div></div>';
+
+  /* ---------- leitura em uma frase ---------- */
+  var frase;
+  if (R.media == null){
+    frase = "Ainda não há notas de 0 a 10 neste período.";
+  } else {
+    var q = Math.round(R.pctBom / 10);
+    frase = "A nota média foi <b>" + n1(R.media) + "</b>. De cada 10 pacientes, cerca de <b>" + q +
+            "</b> " + (q === 1 ? "sai" : "saem") + " indicando a clínica";
+    frase += R.pctRuim >= 20
+      ? ", mas <b>" + pctTxt(R.pctRuim) + "</b> saíram insatisfeitos — é o número que precisa cair."
+      : (R.media >= 9 ? ". É um resultado forte; o desafio é manter." : " e " + pctTxt(R.pctRuim) + " saíram insatisfeitos.");
+  }
+  h += '<p class="rel-frase">' + frase + '</p>';
+
+  /* ---------- números principais ---------- */
+  h += '<div class="rel-secao"><h2>Números principais</h2><div class="rel-tiles">' +
+    tile("Nota média", R.media == null ? "—" : n1(R.media), "de 0 a 10") +
+    tile("Saem satisfeitos", R.comNota ? pctTxt(R.pctBom) : "—", R.grupos.bom + " de " + R.comNota) +
+    tile("Saem insatisfeitos", R.comNota ? pctTxt(R.pctRuim) : "—", R.grupos.ruim + " de " + R.comNota) +
+    tile("Esperando retorno", String(R.esperando), R.comentarios + " escreveram comentário") +
+    '</div></div>';
+
+  /* ---------- composição ---------- */
+  if (R.comNota){
+    var defs = [
+      { k:"bom",   rot:"Saem satisfeitos",   det:"nota 9 ou 10",     cor:"var(--r-bom)" },
+      { k:"medio", rot:"Ficam indiferentes", det:"nota 7 ou 8",      cor:"var(--r-atencao)" },
+      { k:"ruim",  rot:"Saem insatisfeitos", det:"nota 6 ou menos",  cor:"var(--r-ruim)" }
+    ];
+    var faixa = "", leg = "";
+    defs.forEach(function(d){
+      var qtd = R.grupos[d.k]; if (!qtd) return;
+      var pct = qtd / R.comNota * 100;
+      faixa += '<div style="flex:' + pct + ';background:' + d.cor + '">' + (pct >= 9 ? pctTxt(pct) : "") + '</div>';
+      leg += '<span><i class="rel-ponto" style="background:' + d.cor + '"></i>' + esc(d.rot) +
+             ' — <b>' + qtd + '</b> (' + esc(d.det) + ')</span>';
+    });
+    h += '<div class="rel-secao"><h2>Como as notas se dividem</h2>' +
+         '<div class="rel-faixa">' + faixa + '</div><div class="rel-leg">' + leg + '</div></div>';
+  }
+
+  /* ---------- evolução ---------- */
+  var svgTempo = graficoTempoRel(lista);
+  if (svgTempo){
+    h += '<div class="rel-secao"><h2>Evolução da nota média por mês</h2>' + svgTempo + '</div>';
+  }
+
+  /* ---------- nota por pergunta ---------- */
+  var mapa = porPergunta(lista);
+  var chaves = Object.keys(mapa).sort(function(a,b){ return ordemDaPergunta(a) - ordemDaPergunta(b); });
+  if (chaves.length){
+    var linhas = "";
+    chaves.forEach(function(k){
+      var m = mapa[k]; if (!m.n) return;
+      if (m.tipo === "sim_nao"){
+        var pct = m.sim / m.n * 100;
+        linhas += '<div class="rel-linha"><div>' + esc(m.titulo) +
+          '<span style="color:var(--r-ink3)"> · ' + m.n + ' responderam</span></div>' +
+          '<div class="trilho"><i style="width:' + pct.toFixed(0) + '%"></i></div>' +
+          '<div class="v">' + pctTxt(pct) + ' sim</div></div>';
+      } else {
+        var med = m.soma / m.n;
+        var est = med >= 4.5 ? ["bom","Muito bom"] : med >= 4 ? ["bom","Bom"]
+                : med >= 3.5 ? ["atencao","Atenção"] : ["ruim","Prioridade"];
+        linhas += '<div class="rel-linha"><div>' + esc(m.titulo) +
+          '<span class="rel-tag ' + est[0] + '">' + est[1] + '</span>' +
+          '<span style="color:var(--r-ink3)"> · ' + m.n + ' responderam</span></div>' +
+          '<div class="trilho"><i style="width:' + (med/5*100).toFixed(0) + '%"></i></div>' +
+          '<div class="v">' + n1(med) + ' <span style="font-weight:400;color:var(--r-ink3)">/5</span></div></div>';
+      }
+    });
+    if (linhas) h += '<div class="rel-secao"><h2>Nota de cada pergunta</h2><div class="rel-linhas">' + linhas + '</div></div>';
+  }
+
+  /* ---------- por área ---------- */
+  h += blocoRecorte("Resultado por área de atendimento", S.areas.filter(function(a){ return a.ativa; })
+        .map(function(a){ return { nome:a.nome, filtro:function(r){ return r.area_id === a.id; } }; }), lista);
+
+  /* ---------- por convênio ---------- */
+  if (S.config.usar_convenio !== false && !S.filtro.convenio){
+    h += blocoRecorte("SUS e particular", opcoesConvenio().map(function(o){
+      return { nome:o, filtro:function(r){ return r.convenio === o; } };
+    }), lista);
+  }
+
+  /* ---------- o que fazer ---------- */
+  h += '<div class="rel-secao"><h2>Recomendações para o próximo período</h2>' + acoesRel(lista, R) + '</div>';
+
+  /* ---------- vozes dos pacientes ---------- */
+  h += '<div class="rel-secao"><h2>Nas palavras dos pacientes</h2>' + falasRel(lista) + '</div>';
+
+  h += '<div class="rel-rodape">' +
+       '<span>' + esc(S.config.nome_clinica || "") + ' · Relatório gerado automaticamente a partir das respostas dos pacientes</span>' +
+       '<span>Documento de uso interno</span></div>';
+
+  return h;
+}
+
+function tile(rot, n, obs){
+  return '<div class="rel-tile"><div class="rot">' + esc(rot) + '</div>' +
+         '<div class="n">' + esc(n) + '</div><div class="obs">' + esc(obs) + '</div></div>';
+}
+
+/* recorte por área ou por convênio */
+function blocoRecorte(titulo, grupos, lista){
+  var cores = ["var(--r-a)","var(--r-b)","var(--r-c)","var(--r-marca)"];
+  var pacote = grupos.map(function(g, i){
+    var sub = lista.filter(g.filtro);
+    return { nome:g.nome, cor:cores[i % cores.length], R:resumo(sub), n:sub.length };
+  }).filter(function(p){ return p.n > 0; });
+
+  if (pacote.length < 2) return "";
+
+  var caixas = pacote.map(function(p){
+    return '<div class="rel-caixa">' +
+      '<h3><i class="rel-ponto" style="background:' + p.cor + '"></i>' + esc(p.nome) + '</h3>' +
+      '<p class="sub">' + p.n + (p.n === 1 ? " resposta" : " respostas") + '</p>' +
+      '<div class="grande">' + (p.R.media == null ? "—" : n1(p.R.media)) + '</div>' +
+      '<p class="sub" style="margin-top:7px">' + pctTxt(p.R.pctBom) + ' satisfeitos · ' +
+      pctTxt(p.R.pctRuim) + ' insatisfeitos</p></div>';
+  }).join("");
+
+  var aviso = "";
+  var comNota = pacote.filter(function(p){ return p.R.media != null; });
+  if (comNota.length >= 2){
+    var ord = comNota.slice().sort(function(a,b){ return a.R.media - b.R.media; });
+    var dif = ord[ord.length-1].R.media - ord[0].R.media;
+    if (dif >= 1){
+      aviso = '<p class="rel-frase" style="font-size:14px;margin-top:14px">' +
+        '<b>' + esc(ord[0].nome) + '</b> está ' + n1(dif).replace(",0","") +
+        ' ponto' + (dif >= 2 ? "s" : "") + ' abaixo de <b>' + esc(ord[ord.length-1].nome) +
+        '</b>. Vale olhar essa diferença de perto antes de tratar a clínica como um bloco só.</p>';
+    }
+  }
+
+  return '<div class="rel-secao"><h2>' + esc(titulo) + '</h2><div class="rel-grid2">' + caixas + '</div>' + aviso + '</div>';
+}
+
+/* gráfico de linha, cores fixas para imprimir bem */
+function graficoTempoRel(lista){
+  var comNota = lista.filter(function(r){ return r.nota != null; });
+  if (comNota.length < 3) return "";
+  var meses = {};
+  comNota.forEach(function(r){
+    var d = new Date(r.criado_em);
+    var k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+    if (!meses[k]) meses[k] = { soma:0, n:0, iso:r.criado_em };
+    meses[k].soma += r.nota; meses[k].n++;
+  });
+  var ch = Object.keys(meses).sort();
+  if (ch.length < 2) return "";
+  var pts = ch.map(function(k){ return { rot:mesRotulo(meses[k].iso), v:meses[k].soma/meses[k].n, n:meses[k].n }; });
+
+  var L=46,T=20,B=40,Rr=46,W=740,H=215, iw=W-L-Rr, ih=H-T-B;
+  var passo = pts.length > 1 ? iw/(pts.length-1) : 0;
+  var y = function(v){ return T + ih - (v/10)*ih; };
+
+  var g = '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto" role="img" aria-label="Nota média por mês">';
+  [0,2,4,6,8,10].forEach(function(v){
+    g += '<line x1="' + L + '" y1="' + y(v) + '" x2="' + (W-Rr) + '" y2="' + y(v) + '" stroke="#DCE4E5" stroke-width="1"/>';
+    g += '<text x="' + (L-8) + '" y="' + (y(v)+4) + '" text-anchor="end" font-size="11" fill="#6E8288">' + v + '</text>';
+  });
+  var d = pts.map(function(p,i){ return (i?"L":"M") + (L+i*passo).toFixed(1) + " " + y(p.v).toFixed(1); }).join(" ");
+  g += '<path d="' + d + '" fill="none" stroke="#0F5C66" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+  pts.forEach(function(p,i){
+    var cx=L+i*passo, cy=y(p.v);
+    g += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4" fill="#0F5C66" stroke="#fff" stroke-width="1.8"/>';
+    g += '<text x="' + cx.toFixed(1) + '" y="' + (cy-10) + '" text-anchor="middle" font-size="11.5" font-weight="600" fill="#152227">' + n1(p.v) + '</text>';
+    g += '<text x="' + cx.toFixed(1) + '" y="' + (H-16) + '" text-anchor="middle" font-size="11" fill="#6E8288">' + esc(p.rot) + '</text>';
+    g += '<text x="' + cx.toFixed(1) + '" y="' + (H-4) + '" text-anchor="middle" font-size="9.5" fill="#9AABAE">' + p.n + '</text>';
+  });
+  g += "</svg>";
+  return g;
+}
+
+function acoesRel(lista, R){
+  var itens = [];
+  if (R.esperando > 0){
+    itens.push({ cls:"", t:R.esperando + (R.esperando === 1 ? " paciente está esperando" : " pacientes estão esperando") + " um retorno da clínica",
+      p:"Deixaram contato e ainda não foram procurados. Resolver esses casos costuma valer mais do que qualquer mudança de processo.", a:[] });
+  }
+  if (R.comNota >= 5 && R.pctRuim >= 20){
+    itens.push({ cls:"", t:pctTxt(R.pctRuim) + " dos pacientes saíram insatisfeitos",
+      p:"Nota 6 ou menos. Leia os comentários desse grupo antes de mudar qualquer processo: quase sempre há uma causa repetida.", a:[] });
+  }
+  var mapa = porPergunta(lista);
+  Object.keys(mapa).map(function(k){ return mapa[k]; })
+    .filter(function(m){ return m.tipo !== "sim_nao" && m.n >= 3; })
+    .map(function(m){ return { titulo:m.titulo, media:m.soma/m.n, n:m.n }; })
+    .filter(function(m){ return m.media < 4.3; })
+    .sort(function(a,b){ return a.media - b.media; })
+    .slice(0,3)
+    .forEach(function(f){
+      var dica = DICAS.filter(function(d){ return d.re.test(f.titulo); })[0];
+      itens.push({
+        cls: f.media < 3.5 ? "" : "atencao",
+        t: f.titulo,
+        p: "Média " + n1(f.media) + " de 5, com " + f.n + " respostas.",
+        a: dica ? dica.acoes : ["Leve esta pergunta para a próxima reunião de equipe.",
+                                "Escolha uma mudança pequena, aplique por duas semanas e compare com o próximo relatório."]
+      });
+    });
+
+  if (!itens.length){
+    itens.push({ cls:"bom", t:"Nenhum ponto crítico neste período",
+      p:"Todas as perguntas estão com média boa e ninguém está esperando retorno. Vale olhar os comentários mesmo assim — eles trazem ideias que os números não mostram.", a:[] });
+  }
+
+  return itens.map(function(it){
+    return '<div class="rel-acao ' + it.cls + '"><div class="t">' + esc(it.t) + '</div>' +
+      '<p class="p">' + esc(it.p) + '</p>' +
+      (it.a.length ? "<ul>" + it.a.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+      '</div>';
+  }).join("");
+}
+
+function falasRel(lista){
+  var com = lista.filter(function(r){ return r.comentario; }).slice().reverse();
+  if (!com.length) return '<p class="rel-vazio">Nenhum paciente escreveu comentário neste período.</p>';
+
+  var ruins = com.filter(function(r){ return grupoDaNota(r.nota) === "ruim"; }).slice(0,4);
+  var bons  = com.filter(function(r){ return grupoDaNota(r.nota) === "bom"; }).slice(0,2);
+  var resto = com.filter(function(r){ return ruins.indexOf(r) < 0 && bons.indexOf(r) < 0; }).slice(0, Math.max(0, 6 - ruins.length - bons.length));
+  var sel = ruins.concat(resto, bons);
+
+  var h = sel.map(function(r){
+    var g = grupoDaNota(r.nota);
+    var rot = g === "bom" ? "Satisfeito" : g === "medio" ? "Indiferente" : g === "ruim" ? "Insatisfeito" : "Sem nota";
+    var meta = [rot, dataBR(r.criado_em)];
+    if (r.convenio) meta.push(r.convenio);
+    if (r.area_nome) meta.push(r.area_nome);
+    if (r.nota != null) meta.push("nota " + r.nota);
+    return '<div class="rel-fala"><div class="meta">' +
+      meta.map(function(x){ return "<span>" + esc(x) + "</span>"; }).join("") +
+      '</div><p>“' + esc(r.comentario) + '”</p></div>';
+  }).join("");
+
+  if (com.length > sel.length){
+    h += '<p class="rel-vazio">Mostrando ' + sel.length + ' de ' + com.length +
+         ' comentários, priorizando quem saiu insatisfeito. Os demais estão na aba Comentários do painel.</p>';
+  }
+  return h;
+}
 
 /* ================================================================== */
 /* CONFIGURAÇÕES                                                      */
