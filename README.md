@@ -78,11 +78,16 @@ abas de análise.
 
 **Botões do topo:**
 
-- **Gerar relatório** — monta um documento pronto para imprimir ou salvar em PDF,
-  respeitando os filtros que estiverem aplicados. Traz os números principais,
-  como as notas se dividem, a evolução mês a mês, a nota de cada pergunta, o
-  resultado por área e por SUS/particular, recomendações para o próximo período
-  e uma seleção de comentários (priorizando quem saiu insatisfeito).
+- **Gerar relatório** — monta um documento pronto para imprimir ou salvar em PDF.
+  Traz os números principais, como as notas se dividem, **gráficos de pizza**
+  (de onde vieram as respostas, como os pacientes saíram e SUS/particular), a
+  evolução mês a mês, a nota de cada pergunta, o resultado por área e por
+  SUS/particular, recomendações para o próximo período e uma seleção de
+  comentários (priorizando quem saiu insatisfeito).
+
+  Dentro do próprio relatório há **filtros de setor, período, atendimento e
+  profissional**: mude o setor e o relatório inteiro se refaz na hora, sem
+  precisar voltar ao painel. A barra de filtros não sai na impressão.
 - **Baixar planilha** — CSV que abre direto no Excel, com uma linha por resposta.
 
 ---
