@@ -16,10 +16,20 @@ Repositório do código: `clinicafeed-dev/fisio-psico`.
 
 ## Como o paciente vê
 
-1. Escolhe se foi na **fisioterapia** ou na **psicologia**
-2. Diz com quem foi atendido (opcional)
-3. Responde as perguntas daquela área
-4. Escreve o que quiser e, se quiser retorno, deixa o contato
+A logo das Clínicas Sapé abre todas as telas (e no formulário ela encolhe,
+para sobrar tela para as perguntas).
+
+1. Diz se o atendimento foi pelo **SUS** ou **particular**
+2. Escolhe a área num cartão com ilustração — fisioterapia, psicologia ou
+   odontologia
+3. Diz com quem foi atendido (opcional)
+4. Responde as perguntas daquela área
+5. Escreve o que quiser e, se quiser retorno, deixa o contato
+
+A ilustração de cada área é escolhida no painel, em Configurações › Áreas.
+São cinco opções (fisioterapia, psicologia, odontologia, clínica geral e uma
+neutra). Se você criar uma área nova e não escolher nada, o site adivinha
+pelo nome e cai na folha quando não reconhece.
 
 Perguntas marcadas como "todas as áreas" aparecem para todo mundo. As outras só
 para quem escolheu aquela área — é o que permite perguntar sobre exercícios em
@@ -147,4 +157,10 @@ sem isso o link de criar senha não funciona.
 - `index.html` — pesquisa do paciente (monta a tela a partir do banco)
 - `admin.html` — painel com login, análise e edição
 - `config.js` — só o endereço e a chave pública do Supabase
+- `logo.png` · `icone.png` — logo das Clínicas Sapé e o ícone da aba do navegador
 - `supabase/schema.sql` — tabelas, regras de segurança e conteúdo inicial
+- `supabase/migracao-icones.sql` — acrescenta a ilustração das áreas num banco
+  que já existe (pode rodar quantas vezes quiser)
+
+Para trocar a logo, substitua `logo.png` (fundo transparente) e `icone.png`
+por outros arquivos com os mesmos nomes.

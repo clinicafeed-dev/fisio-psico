@@ -55,6 +55,9 @@ create table if not exists public.areas (
   id        uuid primary key default gen_random_uuid(),
   nome      text not null check (char_length(nome) between 1 and 60),
   descricao text check (char_length(descricao) <= 200),
+  -- Ilustração que aparece no cartão da área, escolhida no painel.
+  -- Valores: fisioterapia, psicologia, odontologia, estetoscopio, folha.
+  icone     text check (char_length(icone) <= 30),
   ordem     smallint not null default 0,
   ativa     boolean not null default true,
   criado_em timestamptz not null default now()
@@ -235,16 +238,16 @@ begin
     return;
   end if;
 
-  insert into public.areas (nome, descricao, ordem)
-  values ('Fisioterapia', 'Sessões de reabilitação e tratamento físico', 1)
+  insert into public.areas (nome, descricao, icone, ordem)
+  values ('Fisioterapia', 'Sessões de reabilitação e tratamento físico', 'fisioterapia', 1)
   returning id into v_fisio;
 
-  insert into public.areas (nome, descricao, ordem)
-  values ('Psicologia', 'Atendimento psicológico individual ou em grupo', 2)
+  insert into public.areas (nome, descricao, icone, ordem)
+  values ('Psicologia', 'Atendimento psicológico individual ou em grupo', 'psicologia', 2)
   returning id into v_psico;
 
-  insert into public.areas (nome, descricao, ordem)
-  values ('Odontologia', 'Consultas, procedimentos e tratamento dentário', 3)
+  insert into public.areas (nome, descricao, icone, ordem)
+  values ('Odontologia', 'Consultas, procedimentos e tratamento dentário', 'odontologia', 3)
   returning id into v_odonto;
 
   -- Perguntas de todas as áreas (area_id nulo)
