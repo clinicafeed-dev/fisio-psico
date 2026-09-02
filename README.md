@@ -102,6 +102,30 @@ abas de análise.
 
 ---
 
+## Se o painel disser "Failed to fetch"
+
+Não é senha errada — é o banco que parou de responder. Quase sempre significa
+que o **Supabase pausou o projeto**: no plano gratuito, um projeto que fica
+alguns dias sem receber nenhuma requisição é pausado automaticamente.
+
+Como voltar:
+
+1. Entre em https://supabase.com/dashboard com a conta do GitHub `clinicafeed-dev`
+2. Abra o projeto que está marcado como **paused**
+3. Clique em **Resume project** e espere alguns minutos
+
+**Nenhum dado se perde numa pausa** — o próprio Supabase avisa que respostas,
+backups e arquivos continuam guardados.
+
+Para não acontecer de novo, o arquivo
+`.github/workflows/manter-bancos-acordados.yml` faz uma leitura mínima nos dois
+bancos (este e o do Pulso da Clínica) todo dia de manhã. Se algum não responder,
+o GitHub manda um e-mail avisando. O GitHub desliga sozinho agendamentos de
+repositórios parados há 60 dias — se isso acontecer, ele avisa por e-mail e
+basta reativar na aba **Actions**.
+
+---
+
 ## Segurança
 
 Tudo protegido por Row Level Security no Supabase:

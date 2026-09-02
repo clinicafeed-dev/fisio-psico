@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------------
+#  Mantém os bancos do Supabase acordados.
+#
+#  O plano gratuito do Supabase PAUSA um projeto que fica alguns dias
+#  sem receber nenhuma requisição — e o site sai do ar com
+#  "Failed to fetch" no login. Foi o que aconteceu em setembro de 2026.
+#
+#  Este robô faz uma leitura mínima em cada banco todo dia, então eles
+#  nunca ficam parados tempo suficiente para serem pausados.
+#
+#  As chaves abaixo são as *publishable keys*, as mesmas que já ficam
+#  visíveis no config.js de cada site. Não há segredo aqui.
+# ---------------------------------------------------------------------
+name: Manter os bancos acordados
+
+on:
+  schedule:
+    - cron: "17 9 * * *"    # todo dia às 9h17 UTC (6h17 em Brasília)
+  workflow_dispatch:         # e dá para rodar na mão pelo botão "Run workflow"
+
+jobs:
+  acordar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pulso da Clínica (Clínica Sape-UNIVC)
+        run: |
+          codigo=$(curl -s -o /tmp/r1 -w "%{http_code}" --max-time 30 \
+            -H "apikey: $CHAVE" -H "Authorization: Bearer $CHAVE" \
+            "$URL/rest/v1/respostas?select=id&limit=1")
+          echo "resposta HTTP: $codigo"
+          if [ "$codigo" -ge 400 ] || [ "$codigo" -eq 0 ]; then
+            echo "::error::O banco do Pulso da Clínica não respondeu (HTTP $codigo). Veja se o projeto foi pausado em supabase.com/dashboard."
+            exit 1
+          fi
+        env:
+          URL: https://dumvkqsuwwdcchntansh.supabase.co
+          CHAVE: sb_publishable_ebPeqLWGLTQJch5EI7LpvQ_BtfuSAFR
+
+      - name: Fisioterapia, Psicologia e Odontologia
+        run: |
+          codigo=$(curl -s -o /tmp/r2 -w "%{http_code}" --max-time 30 \
+            -H "apikey: $CHAVE" -H "Authorization: Bearer $CHAVE" \
+            "$URL/rest/v1/areas?select=id&limit=1")
+          echo "resposta HTTP: $codigo"
+          if [ "$codigo" -ge 400 ] || [ "$codigo" -eq 0 ]; then
+            echo "::error::O banco de fisio/psico/odonto não respondeu (HTTP $codigo). Veja se o projeto foi pausado em supabase.com/dashboard."
+            exit 1
+          fi
+        env:
+          URL: https://hdqqmxdptvpoiqgjguqu.supabase.co
+          CHAVE: sb_publishable_WLX3PGioGB8aRnrx5F0svQ_zCs1CBGN
