@@ -37,6 +37,9 @@ jobs:
           CHAVE: sb_publishable_ebPeqLWGLTQJch5EI7LpvQ_BtfuSAFR
 
       - name: Fisioterapia, Psicologia e Odontologia
+        # Roda mesmo se o banco anterior falhar — senão este banco fica
+        # sem acesso e o Supabase pausa ele também (setembro de 2026).
+        if: ${{ !cancelled() }}
         run: |
           codigo=$(curl -s -o /tmp/r2 -w "%{http_code}" --max-time 30 \
             -H "apikey: $CHAVE" -H "Authorization: Bearer $CHAVE" \
